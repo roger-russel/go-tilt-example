@@ -1,0 +1,8 @@
+bin/*
+docs/*
+
+resources/*
+.gitignore
+Makefile
+Tiltfile
+README.md

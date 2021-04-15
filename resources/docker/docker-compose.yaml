@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  api:
+    container_name: go-tilt-example
+    build:
+      context: ./../../
+      target: runner
+      dockerfile: ./resources/docker/Dockerfile
+    depends_on:
+      - mysql
+      - rabbitmq
+    volumes:
+      - ./:/go/src/github.com/roger-russel/go-tilt-example
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./../../resources/dev.env
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_USER: "devuser"
+      MYSQL_DATABASE: "devdatabase"
+      MYSQL_PASSWORD: "06289feb-e4a9-4db0-9594-22bb9b3b9e47"
+      MYSQL_ROOT_PASSWORD: "ce771dab-5b17-441f-906e-31a15f5becc6"
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_dev_backend:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq-volume:/var/lib/rabbitmq 
+
+volumes:
+  database_dev_backend: {}
+  rabbitmq-volume: {}
